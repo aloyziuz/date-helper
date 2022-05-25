@@ -69,13 +69,32 @@ describe("Date helper tests", function(){
     });
 
     it("should correctly identify equal dates", function(){
-        let date1 = new Date(2020, 1, 1, 0, 0, 0);
+        //test same date in utc
+        let date1 = new Date(2020, 1, 1, 1, 0, 0);
         let date2 = new Date(2020, 1, 1, 0, 0, 0);
-        expect(dateh.EqualDate(date1, date2)).to.be.true;
+        expect(dateh.EqualDate(date1, date2, 0)).to.be.true;
 
-        date1 = new Date(2020, 1, 1, 0, 0, 0);
-        date2 = new Date(2020, 1, 2, 0, 0, 0);
-        expect(dateh.EqualDate(date1, date2)).to.be.false;
+        date1 = new Date(2020, 1, 1, 6, 0, 0);
+        date2 = new Date(2020, 1, 1, 8, 0, 0);
+        expect(dateh.EqualDate(date1, date2, 0)).to.be.false;
+
+        //test same date in UTC+7 (assuming current computer is set to UTC+7)
+        date1 = new Date(2020, 1, 1, 1, 0, 0);
+        date2 = new Date(2020, 1, 1, 0, 0, 0);
+        expect(dateh.EqualDate(date1, date2, -420)).to.be.true;
+
+        date1 = new Date(2020, 1, 1, 6, 0, 0);
+        date2 = new Date(2020, 1, 2, 8, 0, 0);
+        expect(dateh.EqualDate(date1, date2, -420)).to.be.false;
+
+        //test same date in UTC-2
+        date1 = new Date(2020, 1, 1, 8, 59, 0);
+        date2 = new Date(2020, 1, 1, 8, 0, 0);
+        expect(dateh.EqualDate(date1, date2, 120)).to.be.true;
+
+        date1 = new Date(2020, 1, 1, 4, 59, 0);
+        date2 = new Date(2020, 1, 1, 5, 0, 0);
+        expect(dateh.EqualDate(date1, date2, 120)).to.be.false;
     });
 
     it("should compute difference in days correctly", function(){

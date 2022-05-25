@@ -8,11 +8,12 @@ module.exports = {
      * @param {Date} date2 
      */
     DateDiffInDays: function(date1, date2) {
-        // Discard the time and time-zone information.
-        const utc1 = module.exports.GetUTCDate(date1);
-        const utc2 = module.exports.GetUTCDate(date2);
+        const offset1 = date1.getTimezoneOffset();
+        const offset2 = date2.getTimezoneOffset();
+        const offsetDiff = offset1 - offset2;
+        const d2 = this.RemoveTime(this.AddMinutes(date2, offsetDiff));
 
-        return Math.abs(Math.floor((utc2 - utc1) / _MS_PER_DAY));
+        return Math.abs(Math.floor((d2 - date1) / _MS_PER_DAY));
     }, 
     
     /**
@@ -44,15 +45,23 @@ module.exports = {
     },
 
     /**
-     * 
+     * it will determine if 2 timestamps are within the same datr at the specified timezone offset or not 
+     * e.g. 22-2-2022 0:0:0 (UTC) and 21-2-2022 23:0:0 (UTC) and we want to check 
+     * whether these 2 timestamps are on the same day or not at timezone (UTC+7 - offset 420mins)
+     * at UTC+7, the 2 lies on the same date and function will return true
+     * at UTC+0, the 2 lies on different dates and function will return false
      * @param {Date} date1 
      * @param {Date} date2 
+     * @param {Number}   desiredOffset offset from UTC time in minutes. 
      */
-    EqualDate: function(date1, date2){
-        let utc1 = this.GetUTCDate(date1);
-        let utc2 = this.GetUTCDate(date2);
+    EqualDate: function(date1, date2, desiredOffset){
+        const offset1 = date1.getTimezoneOffset();
+        const offset2 = date2.getTimezoneOffset();
+        const d1 = this.AddMinutes(date1, desiredOffset + offset1);
+        const d2 = this.AddMinutes(date2, desiredOffset + offset2);
 
-        return utc1 == utc2;
+        return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && 
+            d1.getDate() === d2.getDate();
     }, 
 
     /**
