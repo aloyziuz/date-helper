@@ -89,5 +89,17 @@ module.exports = {
         const res = new Date(date.getTime());
         res.setHours(0, 0, 0, 0);
         return res;
+    }, 
+
+    /**
+     * formats a date into dd-mm-yyyy format
+     * @param {Date} date 
+     * @param {string} separator 
+     */
+    FormatDDMMYYYY: function(date, separator = '-'){
+        const datePart = date.getDate();
+        const monthPart = date.getMonth() + 1;
+        const yearPart = date.getFullYear();
+        return `${datePart}${separator}${monthPart}${separator}${yearPart}`;
     }
 }

@@ -114,4 +114,10 @@ describe("Date helper tests", function(){
         expect(diff).to.equal(31);
         expect(diff).to.equal(dateh.DateDiffInDays(date2, date1));
     });
+
+    it("should format ddmmyyyy date correctly", function(){
+        const d1 = new Date(2022, 2, 22);
+        const str = dateh.FormatDDMMYYYY(d1, '-');
+        expect(str).deep.equal('22-2-2022');
+    });
 });
